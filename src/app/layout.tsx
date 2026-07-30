@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CanvasRoot } from "@/components/canvas/CanvasRoot";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {/* Mounted once, for the life of the app. Never move this into a
+            page or section — see CanvasRoot's doc comment. */}
+        <CanvasRoot />
+        <div className="relative z-10">{children}</div>
+      </body>
     </html>
   );
 }
