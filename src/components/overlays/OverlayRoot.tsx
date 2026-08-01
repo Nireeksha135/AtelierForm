@@ -1,6 +1,6 @@
 "use client";
 
-import { useNativeScrollProgress } from "@/lib/hooks/useNativeScrollProgress";
+import { useLenisScrollProgress } from "@/lib/hooks/useLenisScrollProgress";
 import { JOURNEY_LENGTH_VH } from "@/lib/constants/journey";
 import { HeroSection } from "./HeroSection";
 
@@ -10,13 +10,13 @@ import { HeroSection } from "./HeroSection";
  * canvas itself never scrolls, it only ever reads progress. As Acts
  * 2-5 land, their overlay sections mount here alongside HeroSection.
  *
- * Uses the temporary native-scroll driver for now (see
- * useNativeScrollProgress); swapped for Lenis in the next commit
- * without any section needing to change, since sections only ever
- * consume progress, never the scroll mechanism itself.
+ * Scroll physics are provided by Lenis (see useLenisScrollProgress);
+ * sections only ever consume `journeyProgress`, never the scroll
+ * mechanism itself, so this is the only place that ever needed to
+ * change when Lenis replaced the temporary native-scroll driver.
  */
 export function OverlayRoot() {
-  useNativeScrollProgress();
+  useLenisScrollProgress();
 
   return (
     <div style={{ height: `${JOURNEY_LENGTH_VH}vh` }} className="relative">
