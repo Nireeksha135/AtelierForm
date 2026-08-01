@@ -4,6 +4,8 @@ import { Canvas } from "@react-three/fiber";
 import { PerformanceMonitor } from "@react-three/drei";
 import { Suspense, useState } from "react";
 import { Scene } from "./Scene";
+import { CameraRig } from "./CameraRig";
+import { ProgressDebugControls } from "@/components/dev/ProgressDebugControls";
 import { CAMERA_SETTINGS, DPR_RANGE, VOID_BACKGROUND_COLOR } from "@/lib/constants/renderer";
 
 /**
@@ -21,31 +23,35 @@ export function CanvasRoot() {
   const [dpr, setDpr] = useState<number>(DPR_RANGE[1]);
 
   return (
-    <div aria-hidden className="fixed inset-0 -z-10">
-      <Canvas
-        dpr={dpr}
-        shadows
-        gl={{
-          antialias: true,
-          alpha: false,
-          powerPreference: "high-performance",
-        }}
-        camera={{
-          fov: CAMERA_SETTINGS.fov,
-          near: CAMERA_SETTINGS.near,
-          far: CAMERA_SETTINGS.far,
-          position: CAMERA_SETTINGS.initialPosition,
-        }}
-      >
-        <PerformanceMonitor
-          onIncline={() => setDpr(DPR_RANGE[1])}
-          onDecline={() => setDpr(DPR_RANGE[0])}
-        />
-        <color attach="background" args={[VOID_BACKGROUND_COLOR]} />
-        <Suspense fallback={null}>
-          <Scene />
-        </Suspense>
-      </Canvas>
-    </div>
+    <>
+      {process.env.NODE_ENV === "development" && <ProgressDebugControls />}
+      <div aria-hidden className="fixed inset-0 -z-10">
+        <Canvas
+          dpr={dpr}
+          shadows
+          gl={{
+            antialias: true,
+            alpha: false,
+            powerPreference: "high-performance",
+          }}
+          camera={{
+            fov: CAMERA_SETTINGS.fov,
+            near: CAMERA_SETTINGS.near,
+            far: CAMERA_SETTINGS.far,
+            position: CAMERA_SETTINGS.initialPosition,
+          }}
+        >
+          <PerformanceMonitor
+            onIncline={() => setDpr(DPR_RANGE[1])}
+            onDecline={() => setDpr(DPR_RANGE[0])}
+          />
+          <color attach="background" args={[VOID_BACKGROUND_COLOR]} />
+          <CameraRig />
+          <Suspense fallback={null}>
+            <Scene />
+          </Suspense>
+        </Canvas>
+      </div>
+    </>
   );
 }
