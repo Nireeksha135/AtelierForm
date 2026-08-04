@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { CanvasRoot } from "@/components/canvas/CanvasRoot";
+import { SequenceCanvas } from "@/components/sequence/SequenceCanvas";
+import { ProgressScrubber } from "@/components/dev/ProgressScrubber";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* Mounted once, for the life of the app. Never move this into a
-            page or section — see CanvasRoot's doc comment. */}
-        <CanvasRoot />
+        {/* Mounted once, for the life of the app — see SequenceCanvas's
+            doc comment. Replaces the WebGL CanvasRoot used through
+            Commit #8; same persistence principle, 2D canvas instead. */}
+        <SequenceCanvas />
+        {process.env.NODE_ENV === "development" && <ProgressScrubber />}
         <div className="relative z-10">{children}</div>
       </body>
     </html>
